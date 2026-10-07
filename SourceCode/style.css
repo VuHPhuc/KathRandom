@@ -940,6 +940,73 @@ html, body {
   color: #ffffff;
 }
 
+/* Secret Trigger Bar */
+.secret-trigger-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  background: #111827;
+  border-bottom: 1px solid #1f2937;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+
+.trigger-modes-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.trigger-bar-title {
+  font-weight: 700;
+  color: #38bdf8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trigger-mode-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.15s;
+}
+
+.trigger-mode-opt:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.trigger-mode-opt input {
+  cursor: pointer;
+}
+
+.trigger-mode-opt .opt-label b {
+  color: #ffffff;
+}
+
+.trigger-mode-opt .opt-label i {
+  color: #38bdf8;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.trigger-bar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 /* Secret Nav Tabs */
 .secret-nav-tabs {
   display: flex;

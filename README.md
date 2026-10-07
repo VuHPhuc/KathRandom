@@ -23,33 +23,36 @@
 
 ---
 
-## 🤫 Tính Năng Bí Mật (Phím F1): Ghép Cặp Đấu 2 Bên & Kịch Bản Có Chọn Lọc
+## 🤫 Tính Năng Bí Mật (Phím F1): Nạp Kịch Bản Trước & Kích Hoạt Tàng Hình
 
-Nhấn phím **`F1`** bất cứ lúc nào trên bàn phím để bật/tắt bảng điều khiển bí mật. Người xem hoàn toàn không biết bạn đang can thiệp kết quả:
-
-### 1. ⚔️ Ghép Cặp Đấu 2 Bên (Chỉ Số Chẵn: 2 vs 2, 4 vs 4, 6 vs 6, 8 vs 8)
-- **Quy tắc phân chia:** Gồm 2 bên cân bằng: **⬅️ ĐỘI TRÁI** vs **➡️ ĐỘI PHẢI**.
-- **Chỉ hỗ trợ số lượng chẵn:** Cung cấp sẵn các mẫu nút bấm nhanh: **`2 vs 2`**, **`4 vs 4`**, **`6 vs 6`**, **`8 vs 8`**.
-- **Thứ tự quay tự động từ Trái qua Phải:**
-  - Vòng quay sẽ tự động quay trúng đủ số người của **Đội Bên Trái** trước (ví dụ 2 người bên trái).
-  - Khi Đội Bên Trái đã đủ số lượng, hệ thống sẽ tự động chuyển sang quay cho **Đội Bên Phải** (2 người bên phải).
-- **Thao tác nhanh:**
-  - Nhấn nút **`⚡ Phân bổ tự động (Trái qua Phải)`** để hệ thống tự động gán người chơi vào các vị trí.
-  - Hoặc kéo thả / bấm nút **`+`** cạnh tên để xếp thủ công.
-
-### 2. 🛡️ Tuyệt Đối Bí Mật & Kín Đáo (Không Lộ Thông Tin Ra Màn Hình)
-- Khi vòng quay dừng lại:
-  - Hộp thoại xuất hiện **chuẩn 100% giao diện Wheel of Names**: Thanh tiêu đề đổi màu theo ô trúng thưởng, dòng chữ **"We have a winner!"**, tên người trúng lớn ở giữa, cùng 2 nút **"Close"** và **"Remove"**.
-  - **Không hiển thị bất kỳ thông tin nào về đội, nhóm hay kịch bản ra ngoài màn hình** để người xem thấy mọi thứ hoàn toàn tự nhiên và ngẫu nhiên.
-  - Lịch sử trong tab **Results** cũng chỉ ghi tên người trúng thưởng và thời gian.
-
-### 3. 🎯 Chế Độ Thứ Tự Cá Nhân (Tuần Tự)
-- Có thể chuyển sang tab **"🎯 Thứ Tự Cá Nhân"** nếu muốn định sẵn thứ tự trúng đơn lẻ (Lượt 1 trúng ai, Lượt 2 trúng ai...).
+### 1. 📋 Hướng Dẫn Setup Kịch Bản Trước (Ở Nhà / Trước Giờ G)
+- **Bước 1:** Nhập danh sách tên người chơi vào ô **Entries** bên phải.
+- **Bước 2:** Bấm phím **`F1`** để mở Bảng Kịch Bản Bí Mật.
+- **Bước 3:** Lựa chọn loại kịch bản:
+  - **⚔️ Ghép Cặp Đấu 2 Bên (Chỉ số chẵn: 2vs2, 4vs4, 6vs6, 8vs8):** Chọn mẫu nút bấm nhanh (ví dụ `2 vs 2`), nhấn nút **`⚡ Phân bổ tự động`** (hoặc bấm dấu `+` cạnh tên). Vòng quay sẽ tự động quay đủ người của **Đội Trái** trước, rồi mới quay sang **Đội Phải**.
+  - **🎯 Thứ Tự Cá Nhân (Tuần tự):** Định sẵn người trúng theo thứ tự (Lượt 1 trúng ai, Lượt 2 trúng ai...).
+- **Bước 4:** Đóng bảng F1. Toàn bộ kịch bản **tự động lưu vĩnh viễn vào bộ nhớ máy (`localStorage`)**. Bạn có thể tắt app, tắt máy, hôm sau mang đến hội trường mở lên là kịch bản đã nằm sẵn trong bộ nhớ ngầm.
+- *(Tùy chọn)*: Có nút **"📋 Copy kịch bản"** và **"📥 Dán kịch bản"** để bạn lưu dự phòng ra Zalo/Notepad.
 
 ---
 
-## ⌨️ Phím Tắt Tiện Ích
+### 2. 🥷 Cơ Chế Kích Hoạt Tàng Hình (Cách 1 - Khuyên Dùng Nhất)
+Khi đứng trước máy chiếu hoặc livestream, bạn **tuyệt đối không cần mở F1**:
+- **Quay thử / Demo (1-2 lượt đầu):**
+  - **Click chuột bình thường** vào giữa vòng quay (hoặc nhấn `Ctrl + Enter`).
+  - Vòng quay sẽ quay **hoàn toàn NGẪU NHIÊN 100%**. Thoải mái quay demo bao nhiêu lượt tùy thích!
+- **Quay thật theo kịch bản:**
+  - **Giữ phím `Shift` rồi Click chuột vào vòng quay** (hoặc nhấn `Shift + Ctrl + Enter`).
+  - Vòng quay sẽ **chạy đúng theo kịch bản đã set-up từ trước**!
+  - Khán giả ngồi nhìn máy chiếu chỉ thấy bạn bấm chuột vào giữa vòng quay như bình thường, hoàn toàn không biết tay trái đang đè phím `Shift`.
+- **Dấu hiệu nhận biết bí mật:** Ở góc dưới cùng bên trái màn hình có một chấm 2px tàng hình. Khi bạn giữ phím `Shift`, chấm nhỏ sẽ sáng nhẹ màu xanh ngọc để bạn an tâm biết chắc chắn lượt này đang ăn theo kịch bản.
+
+---
+
+### 3. ⌨️ Phím Tắt Tiện Ích
+- **`Shift` + Click chuột** (hoặc `Shift + Ctrl + Enter`): Quay theo **Kịch bản đã nạp sẵn**.
+- **Click chuột bình thường** (hoặc `Ctrl + Enter`): Quay **Ngẫu nhiên (Demo)**.
 - **`F1`**: Bật / Tắt Bảng Kịch Bản Chọn Lọc & Ghép Cặp Bí Mật.
-- **`Ctrl + Enter`** hoặc **Click chuột vào vòng quay**: Bắt đầu quay vòng.
+- **`F2`**: Bật / Tắt nhanh chế độ kịch bản trong im lặng (không mở popup).
 - **`Esc`**: Đóng nhanh bảng F1 hoặc popup trúng thưởng.
 - **`F11`**: Toàn màn hình.

@@ -45,6 +45,7 @@ class WheelApp {
     this.secretQueue = []; // array of strings (names in order of winning for single mode)
     this.secretModeActive = true;
     this.repeatWhenEmpty = false;
+    this.triggerMode = 'shift'; // 'shift' (Stealth Shift key) or 'always'
 
     // 2-Side Versus Matchups (Only even numbers: 2vs2, 4vs4, 6vs6, 8vs8)
     this.matches = [
@@ -125,12 +126,97 @@ class WheelApp {
     this.groupsSummaryText = document.getElementById('groupsSummaryText');
     this.groupCountPill = document.getElementById('groupCountPill');
 
+    // Stealth trigger mode & export elements
+    this.triggerModeShift = document.getElementById('triggerModeShift');
+    this.triggerModeAlways = document.getElementById('triggerModeAlways');
+    this.exportScriptBtn = document.getElementById('exportScriptBtn');
+    this.importScriptBtn = document.getElementById('importScriptBtn');
+    this.stealthIndicator = document.getElementById('stealthIndicator');
+
     this.init();
   }
 
+  saveToStorage() {
+    try {
+      const data = {
+        entries: this.entries,
+        matches: this.matches,
+        secretQueue: this.secretQueue,
+        secretSubMode: this.secretSubMode,
+        triggerMode: this.triggerMode,
+        secretModeActive: this.secretModeActive,
+        repeatWhenEmpty: this.repeatWhenEmpty
+      };
+      localStorage.setItem('kath_wheel_saved_script', JSON.stringify(data));
+    } catch (e) {
+      console.warn('LocalStorage save failed:', e);
+    }
+  }
+
+  loadFromStorage() {
+    try {
+      const raw = localStorage.getItem('kath_wheel_saved_script');
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.entries) && data.entries.length > 0) {
+          this.entries = data.entries;
+        }
+        if (Array.isArray(data.matches) && data.matches.length > 0) {
+          this.matches = data.matches;
+        }
+        if (Array.isArray(data.secretQueue)) {
+          this.secretQueue = data.secretQueue;
+        }
+        if (data.secretSubMode) {
+          this.secretSubMode = data.secretSubMode;
+        }
+        if (data.triggerMode) {
+          this.triggerMode = data.triggerMode;
+        }
+        if (typeof data.secretModeActive === 'boolean') {
+          this.secretModeActive = data.secretModeActive;
+        }
+        if (typeof data.repeatWhenEmpty === 'boolean') {
+          this.repeatWhenEmpty = data.repeatWhenEmpty;
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage load failed:', e);
+    }
+  }
+
   init() {
+    this.loadFromStorage();
     this.entriesTextarea.value = this.entries.join('\n');
     this.updateEntriesCount();
+
+    if (this.secretModeToggle) {
+      this.secretModeToggle.checked = this.secretModeActive;
+      if (this.secretModeText) {
+        this.secretModeText.textContent = this.secretModeActive ? 'Đang BẬT' : 'Đang TẮT';
+        this.secretModeText.style.color = this.secretModeActive ? '#10b981' : '#94a3b8';
+      }
+    }
+
+    if (this.triggerModeShift && this.triggerModeAlways) {
+      if (this.triggerMode === 'always') {
+        this.triggerModeAlways.checked = true;
+      } else {
+        this.triggerModeShift.checked = true;
+      }
+    }
+
+    if (this.secretSubMode === 'single') {
+      if (this.secretTabSingleBtn) this.secretTabSingleBtn.classList.add('active');
+      if (this.secretTabGroupBtn) this.secretTabGroupBtn.classList.remove('active');
+      if (this.secretSingleBody) this.secretSingleBody.style.display = 'flex';
+      if (this.secretGroupBody) this.secretGroupBody.style.display = 'none';
+    } else {
+      if (this.secretTabGroupBtn) this.secretTabGroupBtn.classList.add('active');
+      if (this.secretTabSingleBtn) this.secretTabSingleBtn.classList.remove('active');
+      if (this.secretSingleBody) this.secretSingleBody.style.display = 'none';
+      if (this.secretGroupBody) this.secretGroupBody.style.display = 'flex';
+    }
 
     this.resizeCanvas();
     window.addEventListener('resize', () => {
@@ -414,7 +500,7 @@ class WheelApp {
     return idx;
   }
 
-  spin() {
+  spin(isScriptTriggered = false) {
     if (this.isSpinning || this.entries.length === 0) return;
 
     sound.init();
@@ -429,7 +515,11 @@ class WheelApp {
     let predeterminedWinner = null;
 
     // CHECK SECRET SCRIPT
-    if (this.secretModeActive) {
+    const shouldUseScript = this.secretModeActive && (
+      this.triggerMode === 'always' ? true : isScriptTriggered
+    );
+
+    if (shouldUseScript) {
       if (this.secretSubMode === 'group') {
         // 2-SIDE VERSUS MATCHUP: Quay từ TRÁI qua PHẢI luôn!
         for (const m of this.matches) {
@@ -474,6 +564,7 @@ class WheelApp {
               this.secretQueue.push(usedWinner);
             }
             this.updateSecretUI();
+            this.saveToStorage();
           }
         }
       }
@@ -551,6 +642,7 @@ class WheelApp {
       }
       team.drawnMembers.push(winnerName);
       this.renderMatchUI();
+      this.saveToStorage();
     }
 
     // Public Results history: ONLY clean person name, completely stealthy!
@@ -596,13 +688,33 @@ class WheelApp {
   // EVENT BINDINGS
   // ==========================================
   bindEvents() {
-    this.canvas.addEventListener('click', () => this.spin());
-    this.centerPrompt.addEventListener('click', () => this.spin());
+    const handleSpinClick = (e) => {
+      const isShift = !!(e && e.shiftKey);
+      this.spin(isShift);
+    };
+
+    this.canvas.addEventListener('click', handleSpinClick);
+    this.centerPrompt.addEventListener('click', handleSpinClick);
 
     window.addEventListener('keydown', (e) => {
+      if (e.key === 'Shift') {
+        const dot = document.getElementById('stealthIndicator');
+        if (dot) dot.style.background = '#10b981';
+      }
+
       if (e.ctrlKey && e.key === 'Enter') {
         e.preventDefault();
-        this.spin();
+        this.spin(e.shiftKey);
+      } else if (e.key === 'Enter' && e.shiftKey && !['TEXTAREA', 'INPUT'].includes(e.target.tagName)) {
+        e.preventDefault();
+        this.spin(true);
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Shift') {
+        const dot = document.getElementById('stealthIndicator');
+        if (dot) dot.style.background = 'transparent';
       }
     });
 
@@ -780,6 +892,7 @@ class WheelApp {
     this.drawWheel();
     this.updateSecretUI();
     this.renderMatchUI();
+    this.saveToStorage();
   }
 
   // ==========================================
@@ -790,6 +903,23 @@ class WheelApp {
       if (e.key === 'F1') {
         e.preventDefault();
         this.toggleSecretModal();
+      }
+      if (e.key === 'F2') {
+        e.preventDefault();
+        this.secretModeActive = !this.secretModeActive;
+        if (this.secretModeToggle) this.secretModeToggle.checked = this.secretModeActive;
+        if (this.secretModeText) {
+          this.secretModeText.textContent = this.secretModeActive ? 'Đang BẬT' : 'Đang TẮT';
+          this.secretModeText.style.color = this.secretModeActive ? '#10b981' : '#94a3b8';
+        }
+        this.updateStatusDot();
+        this.saveToStorage();
+        // Silent flash stealth indicator for 400ms to notify controller
+        const dot = document.getElementById('stealthIndicator');
+        if (dot) {
+          dot.style.background = this.secretModeActive ? '#10b981' : '#ef4444';
+          setTimeout(() => { dot.style.background = 'transparent'; }, 400);
+        }
       }
       if (e.key === 'Escape' && this.secretModal && this.secretModal.classList.contains('open')) {
         this.secretModal.classList.remove('open');
@@ -809,7 +939,10 @@ class WheelApp {
     if (cancelSecretBtn) cancelSecretBtn.addEventListener('click', () => this.toggleSecretModal());
 
     const applySecretBtn = document.getElementById('applySecretBtn');
-    if (applySecretBtn) applySecretBtn.addEventListener('click', () => this.toggleSecretModal());
+    if (applySecretBtn) applySecretBtn.addEventListener('click', () => {
+      this.saveToStorage();
+      this.toggleSecretModal();
+    });
 
     if (this.secretModeToggle) {
       this.secretModeToggle.addEventListener('change', (e) => {
@@ -819,6 +952,68 @@ class WheelApp {
           this.secretModeText.style.color = this.secretModeActive ? '#10b981' : '#94a3b8';
         }
         this.updateStatusDot();
+        this.saveToStorage();
+      });
+    }
+
+    if (this.triggerModeShift) {
+      this.triggerModeShift.addEventListener('change', () => {
+        if (this.triggerModeShift.checked) {
+          this.triggerMode = 'shift';
+          this.saveToStorage();
+        }
+      });
+    }
+
+    if (this.triggerModeAlways) {
+      this.triggerModeAlways.addEventListener('change', () => {
+        if (this.triggerModeAlways.checked) {
+          this.triggerMode = 'always';
+          this.saveToStorage();
+        }
+      });
+    }
+
+    if (this.exportScriptBtn) {
+      this.exportScriptBtn.addEventListener('click', () => {
+        const data = {
+          entries: this.entries,
+          matches: this.matches,
+          secretQueue: this.secretQueue,
+          secretSubMode: this.secretSubMode,
+          triggerMode: this.triggerMode
+        };
+        const str = JSON.stringify(data, null, 2);
+        navigator.clipboard.writeText(str).then(() => {
+          alert('✓ Đã sao chép kịch bản vào bộ nhớ tạm! Bạn có thể dán vào Zalo/Notepad để lưu.');
+        }).catch(() => {
+          prompt('Sao chép mã kịch bản dưới đây:', str);
+        });
+      });
+    }
+
+    if (this.importScriptBtn) {
+      this.importScriptBtn.addEventListener('click', () => {
+        const input = prompt('Dán chuỗi kịch bản (JSON) đã lưu vào đây:');
+        if (!input) return;
+        try {
+          const data = JSON.parse(input.trim());
+          if (Array.isArray(data.entries) && data.entries.length > 0) this.entries = data.entries;
+          if (Array.isArray(data.matches) && data.matches.length > 0) this.matches = data.matches;
+          if (Array.isArray(data.secretQueue)) this.secretQueue = data.secretQueue;
+          if (data.secretSubMode) this.secretSubMode = data.secretSubMode;
+          if (data.triggerMode) this.triggerMode = data.triggerMode;
+
+          this.entriesTextarea.value = this.entries.join('\n');
+          this.updateEntriesCount();
+          this.drawWheel();
+          this.updateSecretUI();
+          this.renderMatchUI();
+          this.saveToStorage();
+          alert('✓ Nạp kịch bản thành công!');
+        } catch (err) {
+          alert('Mã kịch bản không hợp lệ! Vui lòng kiểm tra lại.');
+        }
       });
     }
 
@@ -831,6 +1026,7 @@ class WheelApp {
         if (this.secretGroupBody) this.secretGroupBody.style.display = 'none';
         this.updateSecretUI();
         this.updateStatusDot();
+        this.saveToStorage();
       });
     }
 
@@ -843,6 +1039,7 @@ class WheelApp {
         if (this.secretGroupBody) this.secretGroupBody.style.display = 'flex';
         this.renderMatchUI();
         this.updateStatusDot();
+        this.saveToStorage();
       });
     }
 
@@ -850,6 +1047,7 @@ class WheelApp {
     if (repeatToggle) {
       repeatToggle.addEventListener('change', (e) => {
         this.repeatWhenEmpty = !e.target.checked;
+        this.saveToStorage();
       });
     }
 
@@ -860,6 +1058,7 @@ class WheelApp {
           this.secretQueue.push(name);
         });
         this.updateSecretUI();
+        this.saveToStorage();
       });
     }
 
@@ -868,6 +1067,7 @@ class WheelApp {
       clearScriptBtn.addEventListener('click', () => {
         this.secretQueue = [];
         this.updateSecretUI();
+        this.saveToStorage();
       });
     }
 
@@ -1128,6 +1328,7 @@ class WheelApp {
 
   renderMatchUI() {
     this.updateStatusDot();
+    this.saveToStorage();
     this.groupSourceCount.textContent = `${this.entries.length} người`;
     this.groupCountPill.textContent = `${this.matches.length} trận`;
     this.groupsSummaryText.textContent = `${this.matches.length} trận đấu đã tạo`;

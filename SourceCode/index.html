@@ -312,6 +312,25 @@
         </div>
       </div>
 
+      <!-- Secret Trigger Settings Bar -->
+      <div class="secret-trigger-bar">
+        <div class="trigger-modes-group">
+          <span class="trigger-bar-title">🚀 Cơ chế kích hoạt:</span>
+          <label class="trigger-mode-opt">
+            <input type="radio" name="scriptTriggerMode" value="shift" id="triggerModeShift" checked>
+            <span class="opt-label"><b>🎯 Giữ Shift khi Quay (Khuyên dùng):</b> Click thường = <i>Ngẫu nhiên (Demo)</i> | Đè <i>Shift</i> + Click = <i>Theo kịch bản</i></span>
+          </label>
+          <label class="trigger-mode-opt">
+            <input type="radio" name="scriptTriggerMode" value="always" id="triggerModeAlways">
+            <span class="opt-label"><b>⚡ Luôn chạy kịch bản:</b> Mọi lượt quay đều theo kịch bản</span>
+          </label>
+        </div>
+        <div class="trigger-bar-actions">
+          <button class="btn-sm btn-ghost" id="exportScriptBtn" title="Sao chép kịch bản ra clipboard">📋 Copy kịch bản</button>
+          <button class="btn-sm btn-ghost" id="importScriptBtn" title="Dán kịch bản đã chuẩn bị sẵn">📥 Dán kịch bản</button>
+        </div>
+      </div>
+
       <!-- Secret Sub-mode Tabs -->
       <div class="secret-nav-tabs">
         <button class="secret-tab-btn" id="secretTabSingleBtn">
@@ -408,6 +427,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Tiny Stealth Dot (1-2px, almost invisible) in bottom-left corner -->
+  <div id="stealthIndicator" title="" style="position:fixed;bottom:3px;left:3px;width:3px;height:3px;border-radius:50%;background:transparent;z-index:999999;pointer-events:none;transition:background 0.15s ease;"></div>
 
   <script type="module" src="./script.js"></script>
 </body>
