@@ -6,10 +6,16 @@
 
 ---
 
+## 🌐 Trải Nghiệm Trực Tiếp
+- **🔗 Chơi Online (GitHub Pages):** **[https://vuhphuc.github.io/KathRandom/](https://vuhphuc.github.io/KathRandom/)**
+- **📦 Tải Bản Cài Sẵn Windows (.EXE):** **[Tải VongQuayMayMan.exe từ GitHub Release](https://github.com/VuHPhuc/KathRandom/releases/download/v1.0.0/VongQuayMayMan.exe)**
+
+---
+
 ## 💻 Cách Khởi Động Ứng Dụng
 
 ### 👉 Cách 1: Chạy trực tiếp file EXE (Khuyên dùng cho Laptop Windows)
-- Nhấp đúp chuột vào file: **[`VongQuayMayMan.exe`](file:///c:/Users/boycu/Downloads/KathRandom/VongQuayMayMan.exe)** ngay trong thư mục này.
+- Nhấp đúp chuột vào file: **[`VongQuayMayMan.exe`](file:///c:/Users/boycu/Downloads/KathRandom/VongQuayMayMan.exe)** ngay trong thư mục này (hoặc tải từ Releases).
 - Mở cửa sổ ứng dụng Windows độc lập (Native Desktop App), không cần cài đặt Node.js hay mở trình duyệt web.
 
 ### 👉 Cách 2: Chạy bản Web trên trình duyệt (Dành cho nhà phát triển)
