@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Wheel of Names | Random name picker</title>
+  <meta name="description" content="Free and easy to use spinner. Used by teachers and for raffles. Enter names, spin wheel to pick a random winner. Customize look and feel, save and share wheels.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="128x128" href="./favicon-128x128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./logo.png">
+  <link rel="shortcut icon" href="./favicon.ico">
+  
+  <!-- Exact Google Fonts used by Wheel of Names: Quicksand & Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 for exact iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Fullscreen Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="q-app">
+    <!-- Top Header / App Bar (Clone of Wheel of Names) -->
+    <header class="q-header">
+      <div class="q-toolbar">
+        <!-- Brand Logo & Title -->
+        <div class="brand-group">
+          <div class="brand-logo" title="Wheel of Names">
+            <img src="./logo.png" alt="Wheel of Names" class="brand-img-logo">
+          </div>
+          <h1 class="brand-title">Wheel of Names</h1>
+        </div>
+
+        <!-- Right Toolbar Actions -->
+        <div class="toolbar-actions">
+          <button class="nav-btn" id="customizeBtn" title="Customize wheel">
+            <i class="fas fa-palette"></i>
+            <span>Customize</span>
+          </button>
+          <button class="nav-btn" id="newWheelBtn" title="New wheel">
+            <i class="fas fa-file"></i>
+            <span>New</span>
+          </button>
+          <button class="nav-btn" id="openWheelBtn" title="Open saved wheel">
+            <i class="fas fa-folder-open"></i>
+            <span>Open</span>
+          </button>
+          <button class="nav-btn" id="saveWheelBtn" title="Save wheel">
+            <i class="fas fa-save"></i>
+            <span>Save</span>
+          </button>
+          <button class="nav-btn" id="shareWheelBtn" title="Share wheel">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+          </button>
+          <button class="nav-btn" id="galleryBtn" title="Browse gallery">
+            <i class="fas fa-search"></i>
+            <span>Gallery</span>
+          </button>
+          <button class="nav-btn" id="fullscreenBtn" title="Full screen">
+            <i class="fas fa-expand"></i>
+          </button>
+          <button class="nav-btn" id="moreOptionsBtn" title="More options">
+            <span>More</span>
+            <i class="fas fa-caret-down" style="font-size: 11px;"></i>
+          </button>
+          <button class="nav-btn" id="langBtn" title="Language">
+            <i class="fas fa-globe"></i>
+            <span>English</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="main-container">
+      <!-- Center Wheel Stage -->
+      <main class="wheel-stage-container">
+        <!-- Floating Edit Ad/Options Icon on upper left like wheelofnames.com -->
+        <div class="left-floating-controls">
+          <button class="icon-circle-btn" id="themePencilBtn" title="Wheel theme">
+            <i class="fas fa-pen"></i>
+          </button>
+          <div class="ad-mock-links">
+            <span class="mock-link">Report bad ad <i class="fas fa-flag" style="font-size: 10px;"></i></span>
+            <span class="mock-link">Close ads <i class="fas fa-times-circle" style="font-size: 10px;"></i></span>
+          </div>
+        </div>
+
+        <div class="wheel-wrapper" id="wheelWrapper">
+          <canvas id="wheelCanvas"></canvas>
+
+          <!-- 3D Faceted Chevron Pointer on the right (3 o'clock) matching Wheel of Names -->
+          <div class="wheel-pointer" id="wheelPointer" aria-hidden="true">
+            <svg viewBox="-18 -24 48 48" width="48" height="48" class="pointer-svg">
+              <defs>
+                <filter id="pointerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="4.5" flood-color="rgba(0,0,0,0.48)"/>
+                </filter>
+                <linearGradient id="pointerBodyGradient" x1="0" y1="-20" x2="0" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" id="pointerBodyStopTop" stop-color="#FCE38A"/>
+                  <stop offset="100%" id="pointerBodyStopBottom" stop-color="#C99F1E"/>
+                </linearGradient>
+                <linearGradient id="pointerOuterStrokeGradient" x1="0" y1="-20" x2="0" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" id="pointerOuterStop0" stop-color="#FFF2A7"/>
+                  <stop offset="49%" id="pointerOuterStop49" stop-color="#FCE38A"/>
+                  <stop offset="51%" id="pointerOuterStop51" stop-color="#C99F1E"/>
+                  <stop offset="100%" id="pointerOuterStop100" stop-color="#9E780E"/>
+                </linearGradient>
+                <linearGradient id="pointerInnerStrokeGradient" x1="0" y1="-20" x2="0" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" id="pointerInnerStop0" stop-color="#C99F1E"/>
+                  <stop offset="49%" id="pointerInnerStop49" stop-color="#DEB634"/>
+                  <stop offset="51%" id="pointerInnerStop51" stop-color="#FCE38A"/>
+                  <stop offset="100%" id="pointerInnerStop100" stop-color="#FFF2A7"/>
+                </linearGradient>
+              </defs>
+              <g filter="url(#pointerShadow)">
+                <!-- Base chevron face -->
+                <path id="pointerBody" d="M -15 0 L 25 -20 L 20 0 L 25 20 Z" fill="url(#pointerBodyGradient)"/>
+                <!-- Outer bevel stroke (lineWidth 3, highlights & shadows) -->
+                <path id="pointerOuterStroke" d="M 25 20 L -15 0 L 25 -20" stroke="url(#pointerOuterStrokeGradient)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+                <!-- Inner notch bevel stroke (lineWidth 2) -->
+                <path id="pointerInnerStroke" d="M 25 -20 L 20 0 L 25 20" stroke="url(#pointerInnerStrokeGradient)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Center Curved Overlay Prompt matching Wheel of Names -->
+          <div class="wheel-center-overlay" id="centerPrompt">
+            <svg class="prompt-curved-svg" viewBox="-100 -100 200 200">
+              <defs>
+                <path id="curve-top" d="M -52 0 A 1 1 0 0 1 52 0"/>
+                <path id="curve-bottom" d="M -60 0 A 1 1 0 0 0 60 0"/>
+              </defs>
+              <text text-anchor="middle">
+                <textPath href="#curve-top" xlink:href="#curve-top" startOffset="50%">
+                  <tspan class="click-to-spin">Click to spin</tspan>
+                </textPath>
+              </text>
+              <text text-anchor="middle" class="click-to-spin">
+                <textPath href="#curve-bottom" xlink:href="#curve-bottom" startOffset="50%">or press ctrl+enter</textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Control Panel Sidebar -->
+      <aside class="sidebar-panel" id="sidebarPanel">
+        <!-- Tabs Header -->
+        <div class="sidebar-tabs">
+          <button class="tab-item active" id="tabEntriesBtn">
+            <i class="fas fa-chevron-right tab-chevron"></i>
+            <span class="tab-label">Entries</span>
+            <span class="badge-pill" id="entriesCountBadge">8</span>
+          </button>
+          <button class="tab-item" id="tabResultsBtn">
+            <span class="tab-label">Results</span>
+            <span class="badge-pill" id="resultsCountBadge">0</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Entries Content -->
+        <div class="tab-content active" id="entriesContent">
+          <!-- Action Toolbar -->
+          <div class="entries-toolbar">
+            <button class="tool-btn" id="shuffleBtn" title="Shuffle names">
+              <i class="fas fa-random"></i>
+              <span>Shuffle</span>
+            </button>
+            <button class="tool-btn" id="sortBtn" title="Sort alphabetically">
+              <i class="fas fa-sort-amount-down-alt"></i>
+              <span>Sort</span>
+            </button>
+            <div class="dropdown-wrapper">
+              <button class="tool-btn" id="addImageBtn">
+                <i class="fas fa-image"></i>
+                <span>Add image</span>
+                <i class="fas fa-caret-down" style="font-size: 10px;"></i>
+              </button>
+              <div class="dropdown-menu" id="presetMenu">
+                <button class="menu-item" data-preset="english">English default (Ali, Beatriz...)</button>
+                <button class="menu-item" data-preset="vietnamese">Vietnamese sample (Phúc, Nam...)</button>
+                <button class="menu-item" data-preset="numbers">Numbers (1 to 12)</button>
+                <button class="menu-item" data-preset="prizes">Prizes sample</button>
+              </div>
+            </div>
+            <label class="checkbox-box" title="Advanced options">
+              <input type="checkbox" id="advancedToggle">
+              <span>Advanced</span>
+            </label>
+          </div>
+
+          <!-- Entries Textarea -->
+          <div class="textarea-container">
+            <textarea id="entriesTextarea" spellcheck="false" placeholder="Enter one name per line..."></textarea>
+          </div>
+        </div>
+
+        <!-- Tab 2: Results Content -->
+        <div class="tab-content" id="resultsContent">
+          <div class="results-toolbar">
+            <button class="tool-btn" id="copyResultsBtn">
+              <i class="fas fa-copy"></i>
+              <span>Copy</span>
+            </button>
+            <button class="tool-btn danger" id="clearResultsBtn">
+              <i class="fas fa-trash-alt"></i>
+              <span>Clear</span>
+            </button>
+          </div>
+          <div class="results-scroller" id="resultsList">
+            <div class="results-empty">No results yet. Click the wheel to spin!</div>
+          </div>
+        </div>
+
+        <!-- Sidebar Bottom Bar (Matches Wheel of Names) -->
+        <div class="sidebar-footer">
+          <div class="footer-left">
+            <button class="add-wheel-btn" id="addWheelBtn">
+              <i class="fas fa-plus"></i>
+              <span>Add wheel</span>
+              <i class="fas fa-caret-down" style="font-size: 11px;"></i>
+            </button>
+          </div>
+          <div class="footer-right">
+            <span class="version-tag" id="versionSecretTrigger" title="Press F1 to open secret menu">Version 432</span>
+            <span class="new-pill">New!</span>
+            <a href="https://wheelofnames.com/changelog" target="_blank" class="changelog-link">Changelog</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- EXACT WHEEL OF NAMES WINNER MODAL ("We have a winner!") -->
+  <div class="modal-backdrop" id="winnerModal" aria-hidden="true">
+    <div class="q-dialog-card winner-card">
+      <div class="winner-card-header" id="winnerCardHeader">
+        <span>We have a winner!</span>
+      </div>
+      <div class="winner-card-body">
+        <h2 class="winner-name-text" id="winnerNameDisplay">Diya</h2>
+      </div>
+      <div class="winner-card-actions">
+        <button class="dialog-btn text-btn" id="closeWinnerBtn">Close</button>
+        <button class="dialog-btn primary-btn" id="removeWinnerBtn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMIZE MODAL (Matches Wheel of Names Customize dialog) -->
+  <div class="modal-backdrop" id="customizeModal" aria-hidden="true">
+    <div class="q-dialog-card customize-card">
+      <div class="customize-header">
+        <h3>Customize</h3>
+        <button class="btn-close-modal" id="closeCustomizeBtn">✕</button>
+      </div>
+      <div class="customize-tabs">
+        <button class="custom-tab active">During spin</button>
+        <button class="custom-tab">After spin</button>
+        <button class="custom-tab">Appearance</button>
+      </div>
+      <div class="customize-body">
+        <div class="setting-row">
+          <label>Sound</label>
+          <select id="soundSelect" class="form-select">
+            <option value="ticker">Ticking sound</option>
+            <option value="none">No sound</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label>Spin time (seconds)</label>
+          <input type="range" id="spinTimeSlider" min="3" max="20" value="8" style="flex: 1;">
+          <span id="spinTimeVal">8s</span>
+        </div>
+        <div class="setting-row">
+          <label>Confetti animation</label>
+          <input type="checkbox" id="confettiToggle" checked>
+        </div>
+      </div>
+      <div class="customize-footer">
+        <button class="dialog-btn primary-btn" id="saveCustomizeBtn" style="margin-left: auto;">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       F1 SECRET RIGGED & MATCHUPS MODAL (Secret Controller)
+       ======================================================== -->
+  <div class="modal-backdrop secret-modal-backdrop" id="secretModal" aria-hidden="true">
+    <div class="secret-dialog">
+      <!-- Header -->
+      <div class="secret-header">
+        <div class="secret-title-box">
+          <div class="secret-tag">BẢNG ĐIỀU KHIỂN BÍ MẬT (F1)</div>
+          <h3>Thiết Lập Thứ Tự Quay Có Chọn Lọc</h3>
+          <p class="secret-desc">
+            Vòng quay sẽ trúng lần lượt theo đúng danh sách bên phải. Người xem sẽ thấy vòng quay chuyển động hoàn toàn ngẫu nhiên và tự nhiên!
+          </p>
+        </div>
+        <div class="secret-header-controls">
+          <label class="switch-control" title="Kích hoạt hoặc tạm dừng kịch bản chọn lọc">
+            <span class="switch-label">Trạng thái:</span>
+            <input type="checkbox" id="secretModeToggle" checked>
+            <span class="slider"></span>
+            <span class="switch-status-text" id="secretModeText">Đang BẬT</span>
+          </label>
+          <button class="btn-close-secret" id="closeSecretBtn" title="Đóng bảng (phím F1 hoặc Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Secret Sub-mode Tabs -->
+      <div class="secret-nav-tabs">
+        <button class="secret-tab-btn" id="secretTabSingleBtn">
+          <span>🎯 Thứ Tự Cá Nhân (Tuần tự)</span>
+        </button>
+        <button class="secret-tab-btn active" id="secretTabGroupBtn">
+          <span>⚔️ Ghép Cặp Đấu 2 Bên (2 vs 2, 4 vs 4... Số Chẵn)</span>
+          <span class="group-mode-pill" id="groupCountPill">1 trận</span>
+        </button>
+      </div>
+
+      <!-- Mode 1: Single Sequential -->
+      <div class="secret-body" id="secretSingleBody" style="display: none;">
+        <div class="secret-col source-col">
+          <div class="col-header">
+            <h4>1. Danh sách người chơi hiện tại</h4>
+            <span class="col-count" id="secretSourceCount">0 người</span>
+          </div>
+          <p class="col-hint">Kéo thả sang phải hoặc click nút <b>+</b> để chọn thứ tự trúng</p>
+          <div class="source-items-list" id="secretSourceList"></div>
+          <div class="col-footer-actions">
+            <button class="btn-sm btn-ghost" id="addAllToScriptBtn">➕ Thêm tất cả vào kịch bản</button>
+          </div>
+        </div>
+        <div class="secret-transfer-arrow"><span>➔</span></div>
+        <div class="secret-col target-col">
+          <div class="col-header">
+            <h4>2. Thứ tự trúng thưởng định sẵn (Kịch bản)</h4>
+            <span class="col-count active-badge" id="secretQueueCount">0 lượt</span>
+          </div>
+          <p class="col-hint">Kéo thả để đổi thứ tự lượt quay. Lượt 1 sẽ trúng ở lần quay tiếp theo!</p>
+          <div class="queue-items-list" id="secretQueueList">
+            <div class="queue-empty-state">Chưa có người nào được chọn.<br>Hãy kéo thả hoặc chọn từ danh sách bên trái!</div>
+          </div>
+          <div class="col-footer-actions">
+            <button class="btn-sm btn-danger-ghost" id="clearScriptBtn">🗑️ Xóa hết kịch bản</button>
+            <div class="repeat-checkbox-wrap">
+              <label>
+                <input type="checkbox" id="repeatScriptToggle" checked>
+                <span>Tự động quay về random tự nhiên khi hết kịch bản</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode 2: 2-Sided Versus Matchups (2 vs 2, 4 vs 4... Even numbers only) -->
+      <div class="secret-body group-mode-body" id="secretGroupBody">
+        <div class="secret-col group-source-col">
+          <div class="col-header">
+            <h4>1. Người chơi có sẵn</h4>
+            <span class="col-count" id="groupSourceCount">0 người</span>
+          </div>
+          <p class="col-hint">Kéo thả vào bên Trái hoặc Phải, hoặc bấm <b>+</b></p>
+          <div class="source-items-list" id="groupPlayerSourceList"></div>
+          <div class="col-footer-actions">
+            <button class="btn-sm btn-ghost" id="autoDistributeGroupsBtn">⚡ Phân bổ tự động (Trái qua Phải)</button>
+          </div>
+        </div>
+
+        <div class="secret-col groups-manager-col">
+          <!-- Even numbers presets only -->
+          <div class="group-preset-bar">
+            <span class="preset-label">Mẫu số chẵn:</span>
+            <button class="btn-preset-chip active" data-preset="2v2">⚔️ 2 vs 2</button>
+            <button class="btn-preset-chip" data-preset="4v4">⚔️ 4 vs 4</button>
+            <button class="btn-preset-chip" data-preset="6v6">⚔️ 6 vs 6</button>
+            <button class="btn-preset-chip" data-preset="8v8">⚔️ 8 vs 8</button>
+            <button class="btn-sm btn-accent" id="addNewGroupBtn" style="margin-left: auto;">+ Thêm Cặp Đấu</button>
+          </div>
+
+          <div class="group-rule-banner">
+            🎯 <b>Thứ tự quay tự động:</b> Quay các vị trí ở <b>⬅️ ĐỘI BÊN TRÁI</b> trước (đủ số lượng) ➔ rồi tự động chuyển sang <b>➡️ ĐỘI BÊN PHẢI</b> (từ Trái qua Phải luôn)!
+          </div>
+
+          <div class="groups-cards-container" id="groupsCardsContainer"></div>
+
+          <div class="col-footer-actions group-footer-actions">
+            <button class="btn-sm btn-danger-ghost" id="clearAllGroupsBtn">🗑️ Xóa tất cả cặp đấu</button>
+            <span class="groups-summary-text" id="groupsSummaryText">1 cặp đấu đã tạo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="secret-footer">
+        <div class="secret-keyboard-tip">
+          💡 Mẹo: Nhấn <b>F1</b> bất cứ khi nào trên bàn phím để bật / tắt bảng này.
+        </div>
+        <div class="secret-footer-buttons">
+          <button class="btn btn-secondary" id="cancelSecretBtn">Đóng</button>
+          <button class="btn btn-accent" id="applySecretBtn">Áp dụng kịch bản & Đóng (F1)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+.vite/
+
+# Python cache & build temp
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+build/
+*.spec.bak
+
+# OS generated
+.DS_Store
+Thumbs.db

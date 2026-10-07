@@ -1,0 +1,13 @@
+{
+  "name": "lucky-wheel-random",
+  "version": "1.0.0",
+  "description": "Vòng quay may mắn tùy biến và kịch bản chọn lọc (F1)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
