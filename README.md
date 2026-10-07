@@ -1,24 +1,17 @@
-# Wheel of Names | Bản Sao 1:1 + Tính Năng Bí Mật F1 & File .EXE Laptop
+# Wheel of Names | Bản Sao 1:1 + Tính Năng Bí Mật F1
 
 Ứng dụng bản sao **1:1 giống y đúc [Wheel of Names (wheelofnames.com)](https://wheelofnames.com/)**, đầy đủ thanh công cụ, font chữ Quicksand, vòng quay chuẩn tỷ lệ, bảng Entries/Results, âm thanh ticker, pháo giấy confetti và hộp thoại thông báo chiến thắng "We have a winner!".
 
-Điểm đặc biệt: Tích hợp **Bảng Điều Khiển Bí Mật (F1)** cho phép can thiệp kết quả quay theo kịch bản và ghép cặp đấu 2 bên cực kỳ kín đáo, cùng với **file chạy độc lập .EXE cho Laptop Windows**.
+Điểm đặc biệt: Tích hợp **Bảng Điều Khiển Bí Mật (F1)** cho phép can thiệp kết quả quay theo kịch bản và ghép cặp đấu 2 bên cực kỳ kín đáo, chạy trực tiếp trên nền tảng Web mọi thiết bị.
 
 ---
 
 ## 🌐 Trải Nghiệm Trực Tiếp
 - **🔗 Chơi Online (GitHub Pages):** **[https://vuhphuc.github.io/KathRandom/](https://vuhphuc.github.io/KathRandom/)**
-- **📦 Tải Bản Cài Sẵn Windows (.EXE):** **[Tải VongQuayMayMan.exe từ GitHub Release](https://github.com/VuHPhuc/KathRandom/releases/download/v1.0.0/VongQuayMayMan.exe)**
 
 ---
 
-## 💻 Cách Khởi Động Ứng Dụng
-
-### 👉 Cách 1: Chạy trực tiếp file EXE (Khuyên dùng cho Laptop Windows)
-- Nhấp đúp chuột vào file: **[`VongQuayMayMan.exe`](file:///c:/Users/boycu/Downloads/KathRandom/VongQuayMayMan.exe)** ngay trong thư mục này (hoặc tải từ Releases).
-- Mở cửa sổ ứng dụng Windows độc lập (Native Desktop App), không cần cài đặt Node.js hay mở trình duyệt web.
-
-### 👉 Cách 2: Chạy bản Web trên trình duyệt (Dành cho nhà phát triển)
+## 💻 Khởi Động Bản Local (Dành cho nhà phát triển)
 - Mở thư mục **`SourceCode/`**, nhấp đúp vào **`chay_ung_dung.bat`** (hoặc chạy `npm run dev`), mở tại `http://localhost:5173/`.
 
 ---
